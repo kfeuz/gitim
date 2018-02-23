@@ -46,6 +46,7 @@ Version: {__version__}
         parser.add_argument('-p', '--password', help=u'Github password')
         parser.add_argument('-t', '--token', help=u'Github OAuth token')
         parser.add_argument('-o', '--org', help=u'Organisation/team. User used by default.')
+        parser.add_argument('-r', '--regex', help=u'Repository regex')
         parser.add_argument('-d', '--dest', help=u'Destination directory. Created if doesn\'t exist. [curr_dir]')
         parser.add_argument('--nopull', action='store_true', help=u'Don\'t pull if repository exists. [false]')
         parser.add_argument('--shallow', action='store_true', help=u'Perform shallow clone. [false]')
@@ -85,6 +86,10 @@ Version: {__version__}
 
         get_repos = g.get_organization(args.org).get_repos if args.org else g.get_user().get_repos
         for repo in get_repos():
+            if args.regex:
+                match = re.search(args.regex, repo.name)
+                if not match:
+                    continue
             if not path.exists(join(repo.name)):
                 clone_url = repo.clone_url
                 if args.ssh:
