@@ -8,6 +8,7 @@ from os import chdir, path, makedirs, pardir, environ
 from subprocess import call, Popen
 from functools import partial
 from platform import python_version_tuple
+import re
 
 from github import Github
 
